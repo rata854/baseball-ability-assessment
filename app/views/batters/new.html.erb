@@ -1,0 +1,20 @@
+<p>計算をするので数字を入力してください。</p>
+<%= form_for :batter, url: batters_path do |f| %>
+<p>
+
+ <%= f.label :hit %><br>
+ <%= f.number_field :hit %>
+
+</p>
+<p><%= f.label :at_bat %><br>
+
+<%= f.number_field :at_bat %>
+</p>
+<p><%= f.label :batters_box %><br>
+
+<%= f.number_field :batters_box %>
+</p>
+<p>
+<%= f.submit %>
+</p>
+<% end %>

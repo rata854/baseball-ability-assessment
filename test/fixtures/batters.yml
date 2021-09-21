@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  hit: 1
+  at_bat: 1
+
+two:
+  hit: 1
+  at_bat: 1
