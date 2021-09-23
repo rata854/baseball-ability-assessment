@@ -1,5 +1,7 @@
 class Batter < ApplicationRecord
 
+  # 打撃基本能力
+  # ミートカーソルメソッド
   def self.meet_cursor(batting_average, batters_box, meet_cursor)
     case batting_average
     when 0.39..1
@@ -80,5 +82,61 @@ class Batter < ApplicationRecord
       meet_cursor = meet_cursor - 10
     end
   end
+
+  # 弾道メソッド
+  def self.ballistic(home_run, ballistic)
+    case home_run
+    when 21..100
+      ballistic = 4
+    when 11..20
+      ballistic = 3
+    when 1..10
+      ballistic = 2
+    else
+      ballistic = 1
+    end
+  end
+
+  # パワーメソッド
+  def self.power(home_run, batters_box, slugging_percentage, power)
+    if home_run >= 20 then
+      a = home_run - 20
+      b = a * 2.5 + 115
+      c = home_run - 20
+      d = c * 2.5 + 45
+      e = batters_box / 420
+      f = 1 - e
+      g = d * f / 2
+      h = g + b
+
+      power = h
+    else
+      a = home_run - 5
+      b = a * 3 + 80
+      c = home_run - 5
+      d = c * 3
+      e = batters_box / 420
+      f = 1 - e
+      g = f / 2
+      h = d * g + b
+
+      power = h
+    end
+  end
+
+  # 打撃特殊能力
+  # アベレージヒッター
+  def self.average_hitter(at_bat, hit, home_run, average_hitter)
+    @average_hitter = at_bat / (hit - home_run)
+
+    if @average_hitter <= 3.5 && hit >= 200
+      @average_hitter = "安打製造機"
+    elsif @average_hitter <= 3.5
+      @average_hitter = "アベレージヒッター"
+    else
+      @average_hitter = ""
+    end
+  end
+
 
 end
