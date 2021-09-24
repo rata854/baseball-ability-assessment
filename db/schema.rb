@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_22_082339) do
+ActiveRecord::Schema.define(version: 2021_09_24_060407) do
 
   create_table "batters", force: :cascade do |t|
     t.integer "hit"
