@@ -110,7 +110,7 @@ class Batter < ApplicationRecord
       end
     end
   end
-  
+
   # リーグ平均本塁打率
   def self.
     league_average_home_run_rate(
@@ -205,7 +205,37 @@ class Batter < ApplicationRecord
       when 2000
         league_average_home_run_rate = 0.0277
       end
-    end    
+    end
+  end
+
+  # ボール補正
+  def self.ball_correction(year, ball_correction)
+    if year == 2011 || year == 2012
+      ball_correction = 1.1
+    elsif year == 2001 || year == 2002 || year == 2003 || year == 2004
+      ball_correction = 0.9
+    else
+      ball_correction = 1
+    end
+  end
+
+  # 球場補正
+  def self.
+    baseball_stadium_correction(
+      team, year, baseball_stadium_correction)
+    if team == "日本ハム"
+      baseball_stadium_correction = 1.1
+    elsif team == "ソフトバンク"
+      if year >= 2015
+        baseball_stadium_correction = 1
+      else
+        baseball_stadium_correction = 1.1
+      end
+    elsif team == "オリックス" || team == "楽天" || team == "中日"
+      baseball_stadium_correction = 1.05
+    else
+      baseball_stadium_correction = 1
+    end
   end
 
   # 打撃基本能力
@@ -307,8 +337,9 @@ class Batter < ApplicationRecord
 
   # パワーメソッド
   def self.power(home_run, batters_box, slugging_percentage,
-                 league_average_slugging_percentage, power)
-    if home_run >= 20 then
+                 league_average_slugging_percentage, power,
+                 ball_correction, baseball_stadium_correction)
+    if home_run >= 20
       a = home_run - 20
       b = a * 2.5 + 115
       c = home_run - 20
@@ -318,8 +349,7 @@ class Batter < ApplicationRecord
       g = d * f / 2
       h = g + b
       i = slugging_percentage - league_average_slugging_percentage + 1
-      j = h * i
-
+      j = h * i * ball_correction * baseball_stadium_correction
       power = j
     else
       a = home_run - 5
@@ -331,9 +361,103 @@ class Batter < ApplicationRecord
       g = d * f / 2
       h = g + b
       i = slugging_percentage - league_average_slugging_percentage + 1
-      j = h * i
-
+      j = h * i * ball_correction * baseball_stadium_correction
       power = j
+    end
+    
+    # 100段階変換
+    case power
+    when 250..1000
+      power = 100
+    when 225..254
+      power = 99
+    when 200..224
+      power = 97
+    when 190..199
+      power = 95
+    when 180..189
+      power = 90
+    when 170..179
+      power = 88
+    when 160..169
+      power = 85
+    when 150..159
+      power = 83
+    when 140..149
+      power = 80
+    when 130..139
+      power = 76
+    when 120..129
+      power = 73
+    when 110..119
+      power = 70
+    when 105..109
+      power = 66
+    when 100..104
+      power = 63
+    when 95..99
+      power = 60
+    when 88..94
+      power = 55
+    when 80..87
+      power = 50
+    when 75..79
+      power = 46
+    when 70..74
+      power = 43
+    when 65..69
+      power = 40
+    when 60..64
+      power = 36
+    when 55..59
+      power = 33
+    when 50..54
+      power = 30
+    when 40..49
+      power = 24
+    when 30..39
+      power = 18
+    when 25..29
+      power = 15
+    when 15..24
+      power = 10
+    when 10..14
+      power = 7
+    when 5..9
+      power = 5
+    else
+      power = 0
+    end
+    
+    # 本塁打補正
+    if power >= 100 && home_run >= 60
+      power = 100
+    elsif power >= 100
+      power = 99
+    elsif power >= 90 && home_run >= 50
+      power = power
+    elsif power >= 90
+      power = 89
+    elsif power >= 85 && home_run >= 40
+      power = power
+    elsif power >= 85
+      power = 84
+    elsif power >= 80 && home_run >= 30
+      power = power
+    elsif power >= 80
+      power = 79
+    elsif power >= 70 && home_run >= 20
+      power = power
+    elsif power >= 70
+      power = 69
+    elsif power >= 60 && home_run >= 10
+      power = power
+    elsif power >= 60
+      power = 59
+    elsif power >= 40 && home_run >= 1
+      power = power
+    else
+      slugging_percentage * 100
     end
   end
 
@@ -354,10 +478,10 @@ class Batter < ApplicationRecord
   # パワーヒッター
   def self.power_hitter(home_run, league_average_home_run_rate, power_hitter)
     power_hitter = (home_run * 0.0250) / league_average_home_run_rate
-    if power_hitter >= 30
-      power_hitter = "パワーヒッター"
-    elsif power_hitter >= 50
+    if power_hitter >= 50
       power_hitter = "アーチスト"
+    elsif power_hitter >= 30
+      power_hitter = "パワーヒッター"
     else
       power_hitter = ""
     end

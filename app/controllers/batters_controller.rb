@@ -32,15 +32,20 @@ class BattersController < ApplicationController
     # リーグ平均本塁打率
     @league_average_home_run_rate =
       Batter.league_average_home_run_rate(@league, year, @league_average_home_run_rate)
+    # ボール補正
+    @ball_correction = Batter.ball_correction(year, @ball_correction)
+    # 球場補正
+    @baseball_stadium_correction = 
+      Batter.baseball_stadium_correction(team, year, @baseball_stadium_correction)
 
     # ミートカーソル計算
     @meet_cursor = Batter.meet_cursor(@batting_average, batters_box, @meet_cursor)
     # 弾道計算
-    # @ballistic = 0
     @ballistic = Batter.ballistic(home_run, @ballistic)
     # パワー計算
     @power = Batter.power(home_run, batters_box, @slugging_percentage,
-                          @league_average_slugging_percentage, @power)
+                          @league_average_slugging_percentage, @power,
+                          @ball_correction, @baseball_stadium_correction)
 
 
     # 特殊能力
