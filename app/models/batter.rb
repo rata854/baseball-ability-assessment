@@ -364,7 +364,7 @@ class Batter < ApplicationRecord
       j = h * i * ball_correction * baseball_stadium_correction
       power = j
     end
-    
+
     # 100段階変換
     case power
     when 250..1000
@@ -428,7 +428,7 @@ class Batter < ApplicationRecord
     else
       power = 0
     end
-    
+
     # 本塁打補正
     if power >= 100 && home_run >= 60
       power = 100
@@ -436,23 +436,23 @@ class Batter < ApplicationRecord
       power = 99
     elsif power >= 90 && home_run >= 50
       power = power
-    elsif power >= 90
+    elsif power >= 90 && home_run >= 40
       power = 89
     elsif power >= 85 && home_run >= 40
       power = power
-    elsif power >= 85
+    elsif power >= 85 && home_run >= 30
       power = 84
     elsif power >= 80 && home_run >= 30
       power = power
-    elsif power >= 80
+    elsif power >= 80 && home_run >= 20
       power = 79
     elsif power >= 70 && home_run >= 20
       power = power
-    elsif power >= 70
+    elsif power >= 70 && home_run >= 10
       power = 69
     elsif power >= 60 && home_run >= 10
       power = power
-    elsif power >= 60
+    elsif power >= 60 && home_run >= 1
       power = 59
     elsif power >= 40 && home_run >= 1
       power = power
