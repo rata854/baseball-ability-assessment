@@ -43,9 +43,10 @@ class BattersController < ApplicationController
     # 弾道計算
     @ballistic = Batter.ballistic(home_run, @ballistic)
     # パワー計算
-    @power = Batter.power(home_run, batters_box, @slugging_percentage,
-                          @league_average_slugging_percentage, @power,
-                          @ball_correction, @baseball_stadium_correction)
+    @power = Batter.power(home_run, at_bat, @slugging_percentage, @ball_correction, @power)
+    # @power = Batter.power(home_run, batters_box, @slugging_percentage,
+    #                       @league_average_slugging_percentage, @power,
+    #                       @ball_correction, @baseball_stadium_correction)
 
 
     # 特殊能力
