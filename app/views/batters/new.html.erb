@@ -1,33 +1,60 @@
-<p>計算をするので数字を入力してください。</p>
- <%= form_for :batter, url: batters_path do |f| %>
- <p>
-  <%= f.label :年度 %><br>
-  <%= f.select :team, Batter.teams.keys.to_a, {} %>
- </p>
- <p>
-  <%= f.label :hit %><br>
-  <%= f.number_field :hit %>
- </p>
- <p><%= f.label :at_bat %><br>
-  <%= f.number_field :at_bat %>
- </p>
- <p><%= f.label :batters_box %><br>
-  <%= f.number_field :batters_box %>
- </p>
- <p><%= f.label :home_run %><br>
-   <%= f.number_field :home_run %>
- </p>
- <p><%= f.label :double %><br>
-   <%= f.number_field :double %>
- </p>
- <p><%= f.label :triple %><br>
-   <%= f.number_field :triple %>
- </p>
-  <p><%= f.label :年度 %><br>
-   <%#= f.date_select :year, discard_month:true, start_year: 1950, end_year: 2020 %>
-   <%= f.select :year, (2000...2021) %>
- </p>
- <p>
-   <%= f.submit %>
- </p>
+<%= form_for :batter, url: batters_path do |f| %>
+    <div class="col-2">
+      <div class="form-group">
+        <%= f.label :"チーム名" %>
+        <%= f.select :team, Batter.teams.keys.to_a, {} %>
+      </div>
+    </div>
+    <div class="col-2">
+      <div class="form-group">
+        <%= f.label :"再現年度" %>
+        <%= f.select :year, (2000...2021) %>
+      </div>
+    </div>
+    <div class="col-2">
+      <div class="form-group">
+        <%= f.label :"打席数" %>
+        <%= f.number_field :batters_box, class: 'form-control' %>
+      </div>
+    </div>
+    <div class="col-2">
+      <div class="form-group">
+        <%= f.label :"打数" %>
+        <%= f.number_field :at_bat, class: 'form-control' %>
+      </div>
+    </div>
+    <div class="col-2">
+      <div class="form-group">
+        <%= f.label :"安打" %>
+        <%= f.number_field :hit, class: 'form-control' %>
+      </div>
+    </div>
+    <div class="col-2">
+      <div class="form-group">
+        <%= f.label :"本塁打" %>
+        <%= f.number_field :home_run, class: 'form-control' %>
+      </div>
+    </div>
+    <div class="col-2">
+      <div class="form-group">
+        <%= f.label :"二塁打" %>
+        <%= f.number_field :double, class: 'form-control' %>
+      </div>
+    </div>
+    <div class="col-2">
+      <div class="form-group">
+        <%= f.label :"三塁打" %>
+        <%= f.number_field :triple, class: 'form-control' %>
+      </div>
+    </div>
+    <div class="col-2 align-self-end">
+      <div class="form-group">
+        <%= f.submit "計算", class: 'btn btn-primary' %>
+      </div>
+    </div>
 <% end %>
+
+
+
+
+
